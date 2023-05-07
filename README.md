@@ -2,11 +2,11 @@
 A tiny tool for Excel-DNA and SharpDevelop
 
 # Why
-[SharpDevelop](https://sourceforge.net/projects/sharpdevelop/) is a very nice IDE for unprofessional programmer. It is only 13.8 MB with Winform designer.
+[SharpDevelop](https://sourceforge.net/projects/sharpdevelop/) is a very nice IDE for unprofessional programmer. It is only 13.8 MB with code hinting and Winform designer.
 
-[Excel-DNA](https://excel-dna.net/) is also a very nice addin. With it, I can use C# intead of old VB6.0 in Excel.
+[Excel-DNA](https://excel-dna.net/) is also a very nice addin. With it, I can use C# instead of old VB6.0 in Excel.
 
-To make the conversion be easy to use, I make this script.
+To make the conversion be easy, I make this script.
 
 # How
 0. Change the `XLL_PATH` in the script to yours.
