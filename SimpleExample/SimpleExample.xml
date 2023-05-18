@@ -1,0 +1,13 @@
+<customUI xmlns='http://schemas.microsoft.com/office/2006/01/customui' onLoad='RibbonLoad'>
+  <ribbon>
+    <tabs>
+      <tab id='CustomTab' label='Custom Tab'>
+        <group id='SampleGroup' label='Sample'>
+          <button id='Button1' label='Draw' imageMso='D' size='large' onAction='Button1Click' />
+          <button id='Button2' label='Fill' imageMso='T' size='large' onAction='Button2Click' />
+          <button id='Button3' label='Clear' imageMso='Clear' size='large' onAction='Button3Click' />
+        </group >
+      </tab>
+    </tabs>
+  </ribbon>
+</customUI>

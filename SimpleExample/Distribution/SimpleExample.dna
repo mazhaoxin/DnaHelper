@@ -1,0 +1,178 @@
+<DnaLibrary RuntimeVersion="v4.0" Language="C#" >
+<Reference Name="System.Drawing" />
+<Reference Name="System.Windows.Forms" />
+<Reference Name="Microsoft.Office.Interop.Excel" />
+<![CDATA[
+﻿/*
+ * 由SharpDevelop创建。
+ * 用户： Ma Zhaoxin
+ * 日期: 2023/5/18
+ * 时间: 21:37
+ */
+using System;
+using System.Collections.Generic;
+using System.Drawing;
+using System.Windows.Forms;
+
+using Microsoft.Office.Interop.Excel;
+using XlApp = Microsoft.Office.Interop.Excel.Application;
+
+
+using ExcelDna.Integration;
+using ExcelDna.Integration.CustomUI;
+
+// namespace SimpleExample
+// {
+	/// <summary>
+	/// Description of MainForm.
+	/// </summary>
+	public class SimpleExampleRibbon : ExcelRibbon
+	{
+		XlApp app;
+		Workbook wb;
+		Worksheet ws;
+		
+		const int N = 8;
+
+		public void RibbonLoad(IRibbonUI sender)
+		{
+			//
+			// The InitializeComponent() call is required for Windows Forms designer support.
+			//
+			// InitializeComponent();
+			
+			//
+			// TODO: Add constructor code after the InitializeComponent() call.
+			//
+			app = (XlApp)ExcelDnaUtil.Application;
+			// app.Visible = true;
+			wb = (Workbook)app.ActiveWorkbook;
+			ws = (Worksheet)wb.ActiveSheet;
+		}
+		
+		public void Button1Click(IRibbonControl sender)
+		{
+			// TODO: Implement Button1Click
+		
+			// draw board
+			var c = (Range)ws.Cells[1, 1];
+			c.ColumnWidth = 0.5;
+			c.RowHeight = 6;
+			
+			c = (Range)ws.Cells[N+2+2, N+2+2];
+			c.ColumnWidth = 0.5;
+			c.RowHeight = 6;
+			
+			for (int i = 1; i <= N+2+2; i++) {
+				c = (Range)ws.Cells[1, i];
+				c.Interior.Color = XlRgbColor.rgbDarkGray;
+				c = (Range)ws.Cells[N+2+2, i];
+				c.Interior.Color = XlRgbColor.rgbDarkGray;
+				c = (Range)ws.Cells[i, 1];
+				c.Interior.Color = XlRgbColor.rgbDarkGray;
+				c = (Range)ws.Cells[i, N+2+2];
+				c.Interior.Color = XlRgbColor.rgbDarkGray;
+			}
+			
+			// draw label
+			c = (Range)ws.Cells[2, 2];
+			c.ColumnWidth = 2.5;
+			c.RowHeight = 15;
+			
+			c = (Range)ws.Cells[N+2+1, N+2+1];
+			c.ColumnWidth = 2.5;
+			c.RowHeight = 15;
+			
+			for (int i = 2; i <= N+2+1; i++) {
+				c = (Range)ws.Cells[2, i];
+				c.Interior.Color = XlRgbColor.rgbDarkGoldenrod;
+				c.Font.Color = XlRgbColor.rgbWhite;
+				c = (Range)ws.Cells[N+2+1, i];
+				c.Interior.Color = XlRgbColor.rgbDarkGoldenrod;
+				c.Font.Color = XlRgbColor.rgbWhite;
+				c = (Range)ws.Cells[i, 2];
+				c.Interior.Color = XlRgbColor.rgbDarkGoldenrod;
+				c.Font.Color = XlRgbColor.rgbWhite;
+				c = (Range)ws.Cells[i, N+2+1];
+				c.Interior.Color = XlRgbColor.rgbDarkGoldenrod;
+				c.Font.Color = XlRgbColor.rgbWhite;
+			}
+			
+			// draw main part
+			for (int i = 3; i <= N+2; i++) {
+				c = (Range)ws.Cells[3, i];
+				c.ColumnWidth = 10;
+				c = (Range)ws.Cells[i, 3];
+				c.RowHeight = 60;
+			}
+			
+			for (int i = 3; i <= N+2; i+=2) {
+				for (int j = 3; j <= N+2; j+=2) {
+					c = (Range)ws.Cells[i, j];
+					c.Interior.Color = XlRgbColor.rgbGhostWhite;
+				}
+				for (int j = 3+1; j <= N+2; j+=2) {
+					c = (Range)ws.Cells[i+1, j];
+					c.Interior.Color = XlRgbColor.rgbGhostWhite;
+				}
+			}
+			for (int i = 3; i <= N+2; i+=2) {
+				for (int j = 3+1; j <= N+2; j+=2) {
+					c = (Range)ws.Cells[i, j];
+					c.Interior.Color = XlRgbColor.rgbLightGoldenrodYellow;
+				}
+				for (int j = 3; j <= N+2; j+=2) {
+					c = (Range)ws.Cells[i+1, j];
+					c.Interior.Color = XlRgbColor.rgbLightGoldenrodYellow;
+				}
+			}
+		}
+		
+		public void Button2Click(IRibbonControl sender)
+		{
+			// TODO: Implement Button2Click
+			var c = (Range)ws.Range["A1:L12"];
+			c.HorizontalAlignment = XlHAlign.xlHAlignCenter;
+			c.VerticalAlignment = XlVAlign.xlVAlignCenter;
+			
+			const string s1 = "abcdefgh";
+			const string s2 = "87654321";
+			
+			for (int i = 3; i <= N+2; i++) {
+				c = (Range)ws.Cells[2, i];
+				c.Formula = s1[i-3].ToString();
+				c = (Range)ws.Cells[N+2+1, i];
+				c.Formula = s1[i-3].ToString();
+				c = (Range)ws.Cells[i, 2];
+				c.Formula = s2[i-3].ToString();
+				c = (Range)ws.Cells[i, N+2+1];
+				c.Formula = s2[i-3].ToString();
+			}
+		}
+
+		public void Button3Click(IRibbonControl sender)
+		{
+			// TODO: Implement Button3Click
+			var c = (Range)ws.Range["A1:L12"];
+			c.EntireColumn.Clear();
+		}
+	}
+// }
+
+]]>
+<CustomUI>
+<customUI xmlns='http://schemas.microsoft.com/office/2006/01/customui' onLoad='RibbonLoad'>
+  <ribbon>
+    <tabs>
+      <tab id='CustomTab' label='Custom Tab'>
+        <group id='SampleGroup' label='Sample'>
+          <button id='Button1' label='Draw' imageMso='D' size='large' onAction='Button1Click' />
+          <button id='Button2' label='Fill' imageMso='T' size='large' onAction='Button2Click' />
+          <button id='Button3' label='Clear' imageMso='Clear' size='large' onAction='Button3Click' />
+        </group >
+      </tab>
+    </tabs>
+  </ribbon>
+</customUI>
+</CustomUI>
+</DnaLibrary>
