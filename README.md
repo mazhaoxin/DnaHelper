@@ -16,3 +16,15 @@ To make the conversion be easy, I make this script.
 4. Key your codes in SharpDevelop.
 5. Run it.
 6. Find `*.dna` and `*.xll` in `Distribution` -- They are what you need.
+
+# Note
+Due to my poor programming skill, you must do these:
+1. Involve Excel namespace and rename `Excel.Application` to `XlApp`.
+2. Delare `app`, `wb` and `ws` for `Excel.Application`, `Workbook` and `Worksheet`.
+3. Init them in constructor by
+``` csharp
+    app = new XlApp();
+    app.Visible = true;
+    wb = (Workbook)app.Workbooks.Add();
+    ws = (Worksheet)wb.Worksheets.Add();
+```
