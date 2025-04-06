@@ -29,9 +29,9 @@ def exist_or_error(name):
         sys.exit()
 
 
-exist_or_error(proj_name+'.sln')
-exist_or_error(proj_name)
-exist_or_error(proj_name+'/MainForm.cs')
+# exist_or_error(proj_name+'.sln')
+# exist_or_error(proj_name)
+# exist_or_error(proj_name+'/MainForm.cs')
 
 #==================================================
 DNA_TEMPLATE = '''<DnaLibrary RuntimeVersion="v4.0" Language="C#" >
@@ -45,6 +45,48 @@ __XML__
 </DnaLibrary>'''
 
 REF_TEMPLATE = '<Reference Name="__REF__" />'
+
+CS_TEMPLATE = '''using System;
+using System.Collections.Generic;
+using System.Drawing;
+using System.Windows.Forms;
+
+using Microsoft.Office.Interop.Excel;
+using XlApp = Microsoft.Office.Interop.Excel.Application;
+
+
+namespace SimpleExample
+{
+	public partial class MainForm : Form
+	{
+		XlApp app;
+		Workbook wb;
+		Worksheet ws;
+		
+		public MainForm()
+		{
+			InitializeComponent();
+			
+			app = new XlApp();
+			app.Visible = true;
+			wb = (Workbook)app.Workbooks.Add();
+			ws = (Worksheet)wb.Worksheets.Add();
+		}
+		
+		void Button1Click(object sender, EventArgs e)
+		{
+			// TODO: Implement Button1Click
+            MessageBox.Show("Button-1", "Info", MessageBoxButtons.OK, MessageBoxIcon.Information);
+		}
+		
+		void Button2Click(object sender, EventArgs e)
+		{
+			// TODO: Implement Button2Click
+            MessageBox.Show("Button-2", "Info", MessageBoxButtons.OK, MessageBoxIcon.Information);
+		}
+	}
+}
+'''
 
 XML_TEMPLATE = '''<customUI xmlns='http://schemas.microsoft.com/office/2006/01/customui' onLoad='RibbonLoad'>
   <ribbon>
@@ -73,7 +115,16 @@ else:
 actions = re.findall(r' on\S+=(\S+)', xml)
 actions = [a[1:-1] for a in actions] # remove ' or "
 
-csharp = open(proj_name+'/MainForm.cs', encoding='utf8').read()
+if os.path.exists(proj_name+'/MainForm.cs'):
+    csharp = open(proj_name+'/MainForm.cs', encoding='utf8').read()
+elif os.path.exists(proj_name+'.cs'):
+    csharp = open(proj_name+'.cs', encoding='utf8').read()
+elif os.path.exists('MainForm.cs'):
+    csharp = open('MainForm.cs', encoding='utf8').read()
+else:
+    with open(proj_name+'.cs', 'w', encoding='utf8') as f:
+        f.write(CS_TEMPLATE)
+    csharp = CS_TEMPLATE
 
 ref = []
 for r in re.findall(r'using (\S+);', csharp):
