@@ -10,10 +10,10 @@
 #   2. Run it.
 #   3. Find *.xll, *.dna and auto_load.vbs in `./Distribution`.
 # Note:
-#   1. Must involve Excel namespace and rename `Excel.Application` to `XlApp`.
+#   1. Must involve Excel namespace and rename `Excel.Application` to `ExcelApp`.
 #   2. Must delare `app`, `wb` and `ws` for `Excel.Application`, `Workbook` and `Worksheet`.
 #   3. Must init them in constructor by
-#       app = new XlApp();
+#       app = new ExcelApp();
 #       app.Visible = true;
 #       wb = (Workbook)app.Workbooks.Add();
 #       ws = (Worksheet)wb.Worksheets.Add();
@@ -144,7 +144,7 @@ using ExcelDna.Integration.CustomUI;
     cs = re.sub(r'\n}\n', r'\n// }\n', cs)
     cs = cs.replace('public partial class MainForm : Form', f'public class {proj_name}Ribbon : ExcelRibbon')
     cs = cs.replace('public MainForm()', 'public void RibbonLoad(IRibbonUI sender)')
-    cs = cs.replace('app = new XlApp();', 'app = (XlApp)ExcelDnaUtil.Application;')
+    cs = cs.replace('app = new ExcelApp();', 'app = (ExcelApp)ExcelDnaUtil.Application;')
     cs = cs.replace('app.Visible = true;', '// app.Visible = true;')
     cs = cs.replace('wb = (Workbook)app.Workbooks.Add();', 'wb = (Workbook)app.ActiveWorkbook;')
     cs = cs.replace('ws = (Worksheet)wb.Worksheets.Add();', 'ws = (Worksheet)wb.ActiveSheet;')
@@ -161,7 +161,7 @@ def write_dna(proj_name:str, ref:str, cs:str, xml:str) -> None:
     if not os.path.exists(xll_path):
         shutil.copyfile(XLL_PATH, xll_path)
 
-    DNA_TEMPLATE = '''<DnaLibrary RuntimeVersion="v4.0" Language="C#" >
+    DNA_TEMPLATE = '''<DnaLibrary Name="__NAME__" RuntimeVersion="v4.0" Language="C#" >
 __REFERENCE__
 <![CDATA[
 __CSHARP__
@@ -170,7 +170,8 @@ __CSHARP__
 __XML__
 </CustomUI>
 </DnaLibrary>'''
-    dna = DNA_TEMPLATE.replace('__REFERENCE__', ref)
+    dna = DNA_TEMPLATE.replace('__NAME__', proj_name)
+    dna = dna.replace('__REFERENCE__', ref)
     dna = dna.replace('__CSHARP__', cs)
     dna = dna.replace('__XML__', xml)
     with open(dna_path, 'w', encoding='utf8') as f:
@@ -188,13 +189,13 @@ using System.Drawing;
 using System.Windows.Forms;
 
 using Microsoft.Office.Interop.Excel;
-using XlApp = Microsoft.Office.Interop.Excel.Application;
+using ExcelApp = Microsoft.Office.Interop.Excel.Application;
 
 namespace SimpleExample
 {
 	public partial class MainForm : Form
 	{
-		XlApp app;
+		ExcelApp app;
 		Workbook wb;
 		Worksheet ws;
 		
@@ -202,7 +203,7 @@ namespace SimpleExample
 		{
 			InitializeComponent();
 			
-			app = new XlApp();
+			app = new ExcelApp();
 			app.Visible = true;
 			wb = (Workbook)app.Workbooks.Add();
 			ws = (Worksheet)wb.Worksheets.Add();
@@ -284,3 +285,4 @@ if __name__ == '__main__':
     )
 
     input('\n    Press ENTER to close ...')
+
